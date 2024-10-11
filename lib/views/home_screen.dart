@@ -15,16 +15,16 @@ class HomeScreen extends StatelessWidget {
             ClipPath(
                 clipper: CustomCurvedEdges(),
                 child: Container(
-                  color: const Color.fromARGB(1, 1, 1, 1),
+                  color: const Color.fromARGB(255, 253, 111, 45),
                   padding: const EdgeInsets.all(0),
                   child: const SizedBox(
-                    height: 400,
+                    height: 150,
                     child: Stack(
                       children: [
                         Positioned(
-                            top: -150, right: -250, child: CircularContainer()),
+                            top: -120, right: -210, child: CircularContainer()),
                         Positioned(
-                            top: 180, right: -300, child: CircularContainer()),
+                            top: 40, right: -200, child: CircularContainer()),
                       ],
                     ),
                   ),
