@@ -4,6 +4,7 @@ import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
 import 'package:primera_app/views/Widgets/parking_availability_widget.dart';
+// ignore: unused_import
 import 'package:primera_app/views/Widgets/parking_card_availability.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -90,9 +91,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 )),
-                const ParkingAvailabilityWidget(), 
-                
-              
+            const ParkingAvailabilityWidget(),
           ],
         )));
   }

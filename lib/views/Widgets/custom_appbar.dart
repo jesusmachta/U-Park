@@ -12,8 +12,16 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 50.0),
+      padding: EdgeInsets.fromLTRB(
+        screenWidth * 0.04, // Izquierda
+        screenHeight * 0.065, // Arriba
+        screenWidth * 0.04, // Derecha
+        0, // Abajo
+      ),
       child: AppBar(
         backgroundColor: const Color.fromARGB(1, 1, 1, 1),
         title: title,
