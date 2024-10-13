@@ -16,8 +16,11 @@ class ParkingCardAvailability extends StatelessWidget {
   Widget build(BuildContext context) {
     Color availableColor;
     if (available == 0) {
-      availableColor = Colors.grey; // Rojo si no hay disponibles
-    } else {
+      availableColor = Colors.red; // Rojo si no hay disponibles
+    } else if(available>= total/2){
+      availableColor = Colors.green; // Verde si hay más de la mitad
+    }
+    else {
       availableColor = Colors.orange; // Verde si hay más de la mitad
     }
 
