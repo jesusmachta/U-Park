@@ -1,11 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:primera_app/controllers/parking_data.dart';
 import 'package:primera_app/controllers/parking_lot_controller.dart';
 import 'package:primera_app/models/parking_lot.dart';
 import '/views/Widgets/parking_card_availability.dart';
-
-
 
 class ParkingAvailabilityWidget extends StatefulWidget {
   const ParkingAvailabilityWidget({super.key});
@@ -24,7 +20,27 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
       stream: controller.getParkingLots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Cargando datos
+          final size = MediaQuery.of(context).size;
+
+          return Center(
+            child: Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                CircularProgressIndicator(
+                  strokeWidth: size.width * 0.02, 
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                ),
+              SizedBox(height: size.height * 0.02), 
+              Text(
+                'Cargando estacionamientos...',
+                style: TextStyle(
+                fontSize: size.width * 0.05, 
+                fontWeight: FontWeight.w500,
+                ),
+              ),
+              ],
+            ),
+          );
         }
 
         if (snapshot.hasError) {
