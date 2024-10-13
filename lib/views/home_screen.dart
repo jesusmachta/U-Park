@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:primera_app/controllers/parking_lot_controller.dart';
 import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
@@ -8,7 +9,12 @@ import 'package:primera_app/views/Widgets/parking_availability_widget.dart';
 import 'package:primera_app/views/Widgets/parking_card_availability.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final ParkingLotController controller = ParkingLotController();
+  // Dentro del body del widget debes tener un StreamBuilder para que se actualice segun los datos recibidos en tiempo real
+  // Este StreamBuilder debe tener la siguiente variable del controlador para obtener los datos
+  // stream: controller.getParkingLots(),
 
   @override
   Widget build(BuildContext context) {

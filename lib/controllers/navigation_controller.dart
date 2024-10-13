@@ -8,9 +8,5 @@ import 'package:primera_app/views/stats_screen.dart';
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [
-    const HomeScreen(),
-    const StatsScreen(),
-    const CommentsScreen()
-  ];
+  final screens = [HomeScreen(), const StatsScreen(), const CommentsScreen()];
 }
