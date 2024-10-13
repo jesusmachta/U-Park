@@ -14,77 +14,97 @@ class ParkingCardAvailability extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size; 
     Color availableColor;
     if (available == 0) {
-      availableColor = Colors.red; // Rojo si no hay disponibles
+      availableColor = Colors.red; 
     } else if(available>= total/2){
-      availableColor = Colors.green; // Verde si hay más de la mitad
+      availableColor = Colors.green; 
     }
     else {
-      availableColor = Colors.orange; // Verde si hay más de la mitad
+      availableColor = Colors.orange; 
     }
 
-    return Container(
-      key: ValueKey(name),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8.0,
-            offset: Offset(0, -4),
-          ),
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8.0,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
+    return Center( 
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      
+      final cardWidth = constraints.maxWidth > 600
+          ? 600.0 
+          : (constraints.maxWidth * 0.9).toDouble(); 
+
+      return Container(
+        key: ValueKey(name),
+        width: cardWidth,  
+        margin: EdgeInsets.symmetric(
+          vertical: size.height * 0.02,
+          horizontal: size.width * 0.05,
+        ),
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8.0,
+              offset: Offset(0, -4),
+            ),
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8.0,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(
-                    fontSize: 20,
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: EdgeInsets.all(size.width * 0.04),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Título del estacionamiento en mayúsculas
+                Text(
+                  name.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: size.width * 0.05,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '$available',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: availableColor,
-                    ),
+                    color: Colors.black,
                   ),
-                  Text(
-                    '/$total',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.black,
+                ),
+                SizedBox(height: size.height * 0.02),
+
+                // Row para mostrar disponibilidad y total de espacios
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$available',
+                      style: TextStyle(
+                        fontSize: size.width * 0.12,
+                        fontWeight: FontWeight.bold,
+                        color: availableColor,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      '/$total',
+                      style: TextStyle(
+                        fontSize: size.width * 0.05,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    },
+  ),
+);
   }
 }
