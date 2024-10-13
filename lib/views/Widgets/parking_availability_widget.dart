@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:primera_app/controllers/parking_data.dart';
-import '/views/Widgets/parking_card_availability.dart'; 
+import '/views/Widgets/parking_card_availability.dart';
 
 class ParkingAvailabilityWidget extends StatefulWidget {
-  const ParkingAvailabilityWidget({Key? key}) : super(key: key);
+  const ParkingAvailabilityWidget({super.key});
 
   @override
-  _ParkingAvailabilityWidgetState createState() => _ParkingAvailabilityWidgetState();
+  // ignore: library_private_types_in_public_api
+  _ParkingAvailabilityWidgetState createState() =>
+      _ParkingAvailabilityWidgetState();
 }
 
 class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
@@ -17,7 +19,7 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
   void initState() {
     super.initState();
     fetchData(); // Inicializa la carga de datos
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(const Duration(seconds: 30), (timer) {
       fetchData(); // Revisa la base de datos cada 30 segundos
     });
   }
@@ -46,4 +48,3 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
     );
   }
 }
-

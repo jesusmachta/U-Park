@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
+// ignore: unused_import
 import 'package:primera_app/views/Widgets/parking_percentage_card.dart';
 import 'package:primera_app/views/Widgets/parking_percentage_widget.dart';
 
@@ -72,8 +73,8 @@ class StatsScreen extends StatelessWidget {
               indicatorColor: Colors.orange,
             ),
             // Tab bar view
-            Expanded(
-              child: const TabBarView(
+            const Expanded(
+              child: TabBarView(
                 children: [
                   // First tab content
                   ParkingPercentageWidget(),
@@ -95,7 +96,7 @@ class PeakHoursWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text("Contenido de Horas Picos"),
     );
   }
