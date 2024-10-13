@@ -25,6 +25,7 @@ class ParkingCardAvailability extends StatelessWidget {
     }
 
     return Container(
+      key: ValueKey(name),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
