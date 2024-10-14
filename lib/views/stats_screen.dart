@@ -77,9 +77,13 @@ class StatsScreen extends StatelessWidget {
               child: TabBarView(
                 children: [
                   // First tab content
-                  ParkingPercentageWidget(),
+                  SingleChildScrollView(
+                    child: ParkingPercentageWidget(),
+                  ),
                   // Second tab content
-                  PeakHoursWidget(),
+                  SingleChildScrollView(
+                    child: PeakHoursWidget(),
+                  )
                 ],
               ),
             ),
