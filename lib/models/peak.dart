@@ -1,14 +1,12 @@
 class Peak {
   String id;
   String timestamp;
-  String date;
   bool type;
   String idPrkingLot;
 
   Peak({
     required this.id,
     required this.timestamp,
-    required this.date,
     required this.type,
     required this.idPrkingLot,
   });
@@ -18,7 +16,6 @@ class Peak {
     return {
       'id': id,
       'timestamp': timestamp,
-      'date': date,
       'type': type,
       'idParkingLot': idPrkingLot,
     };
@@ -29,7 +26,6 @@ class Peak {
     return Peak(
       id: map['id'],
       timestamp: map['timestamp'],
-      date: map['date'],
       type: map['type'],
       idPrkingLot: map['idParkingLot'],
     );
