@@ -72,7 +72,7 @@ class ParkingCardAvailability extends StatelessWidget {
                   style: TextStyle(
                     fontSize: size.width * 0.05,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Colors.grey[600],
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
