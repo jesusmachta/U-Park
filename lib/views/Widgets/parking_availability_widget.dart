@@ -16,6 +16,8 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return StreamBuilder<List<ParkingLot>>(
       stream: controller.getParkingLots(),
       builder: (context, snapshot) {
@@ -23,24 +25,36 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
           final size = MediaQuery.of(context).size;
 
           return Center(
-            child: Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                CircularProgressIndicator(
-                  strokeWidth: size.width * 0.02, 
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    0, // Izquierda
+                    screenHeight * 0.3, // Arriba
+                    0, // Derecha
+                    0, // Abajo
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        strokeWidth: size.width * 0.02,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.orangeAccent),
+                      ),
+                      SizedBox(height: size.height * 0.02),
+                      Text(
+                        'Cargando estacionamientos...',
+                        style: TextStyle(
+                          fontSize: size.width * 0.04,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              SizedBox(height: size.height * 0.02), 
-              Text(
-                'Cargando estacionamientos...',
-                style: TextStyle(
-                fontSize: size.width * 0.05, 
-                fontWeight: FontWeight.w500,
-                ),
-              ),
-              ],
-            ),
-          );
+              ]));
         }
 
         if (snapshot.hasError) {
@@ -51,7 +65,13 @@ class _ParkingAvailabilityWidgetState extends State<ParkingAvailabilityWidget> {
 
         return Column(
           children: parkingLots.map((parkingLot) {
-            final available = parkingLot.totalParkingSpace - parkingLot.cars;
+            // Validaciones de Cantidad de Carros
+            final cars = parkingLot.cars;
+            final space = parkingLot.totalParkingSpace;
+            var available = space - cars;
+            if (cars > space) {
+              available = 0;
+            }
 
             return ParkingCardAvailability(
               name: parkingLot.name,

@@ -12,6 +12,7 @@ class ParkingPercentageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     Color availableColor;
     if (double.parse(percentage) > 50) {
       availableColor = Colors.green;
@@ -22,7 +23,8 @@ class ParkingPercentageCard extends StatelessWidget {
     }
     return Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin:
+          EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.02),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(8.0),
