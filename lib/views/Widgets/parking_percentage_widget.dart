@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:primera_app/controllers/parking_lot_controller.dart';
 import 'package:primera_app/models/parking_lot.dart';
+// ignore: unused_import
 import 'dart:async';
 import 'parking_percentage_card.dart';
 
@@ -68,9 +69,6 @@ import 'parking_percentage_card.dart';
 //   }
 // }
 
-
-
-import 'package:primera_app/controllers/parking_lot_controller.dart'; // Importar tu controlador
 
 class ParkingPercentageWidget extends StatefulWidget {
   const ParkingPercentageWidget({Key? key}) : super(key: key);
