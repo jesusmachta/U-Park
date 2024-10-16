@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
-// ignore: unused_import
-import 'package:primera_app/views/Widgets/parking_percentage_card.dart';
 import 'package:primera_app/views/Widgets/parking_percentage_widget.dart';
+import 'package:primera_app/views/Widgets/peak_hours_widget.dart'; // Importar el widget de horas pico
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -73,7 +72,7 @@ class StatsScreen extends StatelessWidget {
               indicatorColor: Colors.orange,
             ),
             // Tab bar view
-            const Expanded(
+            Expanded(
               child: TabBarView(
                 children: [
                   // First tab content
@@ -82,7 +81,7 @@ class StatsScreen extends StatelessWidget {
                   ),
                   // Second tab content
                   SingleChildScrollView(
-                    child: PeakHoursWidget(),
+                    child: PeakHoursWidget(), // Usar el widget de horas pico
                   )
                 ],
               ),
@@ -90,18 +89,6 @@ class StatsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Dummy widget for PeakHoursWidget
-class PeakHoursWidget extends StatelessWidget {
-  const PeakHoursWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Contenido de Horas Picos"),
     );
   }
 }
