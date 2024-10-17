@@ -1,14 +1,17 @@
 class Peak {
   String id;
-  String timestamp;
-  bool type;
-  String idPrkingLot;
+  DateTime
+      timestamp; //Tambien lo pudiesemos tener como String, lo que sea mejor para el manejo de la stat
+  String dayOfWeek;
+  String type;
+  String idParkingLot;
 
   Peak({
     required this.id,
     required this.timestamp,
+    required this.dayOfWeek,
     required this.type,
-    required this.idPrkingLot,
+    required this.idParkingLot,
   });
 
   // Método para convertir la tarea a un mapa (útil para almacenar en bases de datos)
@@ -16,8 +19,9 @@ class Peak {
     return {
       'id': id,
       'timestamp': timestamp,
+      'dayOfWeek': dayOfWeek,
       'type': type,
-      'idParkingLot': idPrkingLot,
+      'idParkingLot': idParkingLot,
     };
   }
 
@@ -26,8 +30,9 @@ class Peak {
     return Peak(
       id: map['id'],
       timestamp: map['timestamp'],
+      dayOfWeek: map['dayOfWeek'],
       type: map['type'],
-      idPrkingLot: map['idParkingLot'],
+      idParkingLot: map['idParkingLot'],
     );
   }
 }
