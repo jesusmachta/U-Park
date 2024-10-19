@@ -11,7 +11,7 @@ class StatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 2, // Número de pestañas
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -77,12 +77,12 @@ class StatsScreen extends StatelessWidget {
                 children: [
                   // First tab content
                   SingleChildScrollView(
-                    child: ParkingPercentageWidget(),
+                    child: ParkingPercentageWidget(), // Widget de porcentajes
                   ),
                   // Second tab content
                   SingleChildScrollView(
-                    child: PeakHoursWidget(), // Usar el widget de horas pico
-                  )
+                    child: PeakHoursWidget(), // Llamada al widget de horas pico
+                  ),
                 ],
               ),
             ),
