@@ -75,8 +75,9 @@ class ParkingPercentageCard extends StatelessWidget {
 
   // Método para calcular el porcentaje
   double calculatePercentage() {
+      int validCars = currentCars > totalSpots ? totalSpots : currentCars; // Validar que los carros no superen los puestos
     if (totalSpots == 0) return 0; // Evitar división por cero
-    return (currentCars / totalSpots) * 100;
+    return (validCars / totalSpots) * 100;
   }
 
   @override

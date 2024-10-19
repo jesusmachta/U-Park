@@ -12,93 +12,102 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final ParkingLotController controller = ParkingLotController();
-  // Dentro del body del widget debes tener un StreamBuilder para que se actualice segun los datos recibidos en tiempo real
+  // Dentro del body del widget debes tener un StreamBuilder para que se actualice según los datos recibidos en tiempo real
   // Este StreamBuilder debe tener la siguiente variable del controlador para obtener los datos
   // stream: controller.getParkingLots(),
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-            child: Column(
-          children: [
-            // Header
-            ClipPath(
-                clipper: CustomCurvedEdges(),
-                child: Container(
-                  color: const Color.fromARGB(255, 253, 111, 45),
-                  padding: const EdgeInsets.all(0),
-                  child: SizedBox(
-                    height: 200,
-                    child: Stack(
+      backgroundColor: Colors.white,
+      body: Column(
+        // Se cambia a `Column` para manejar la estructura principal
+        children: [
+          // Header (Encabezado fijo, no hace scroll)
+          ClipPath(
+            clipper: CustomCurvedEdges(),
+            child: Container(
+              color: const Color.fromARGB(255, 253, 111, 45),
+              padding: const EdgeInsets.all(0),
+              child: SizedBox(
+                height: 200,
+                child: Stack(
+                  children: [
+                    const Positioned(
+                        top: -80, right: -210, child: CircularContainer()),
+                    const Positioned(
+                        top: 40, right: -200, child: CircularContainer()),
+                    // Appbar
+                    Column(
                       children: [
-                        const Positioned(
-                            top: -80, right: -210, child: CircularContainer()),
-                        const Positioned(
-                            top: 40, right: -200, child: CircularContainer()),
-                        // Appbar
-                        Column(
-                          children: [
-                            CustomAppbar(
-                                title: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Puestos de Estacionamiento",
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color:
-                                            Color.fromARGB(255, 231, 229, 229),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Disponibilidad",
-                                      style: TextStyle(
-                                        fontSize: 35.0,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromARGB(255, 241, 239, 239),
-                                      ),
-                                    )
-                                  ],
+                        CustomAppbar(
+                          title: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Puestos de Estacionamiento",
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Color.fromARGB(255, 231, 229, 229),
                                 ),
-                                actions: [
-                                  IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          // filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title:
-                                                  const Text('Notificaciones'),
-                                              content: const Text(
-                                                  'Pronto tendras donde crear notificaciones personalizadas'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Cerrar'),
-                                                ),
-                                              ],
-                                            );
+                              ),
+                              Text(
+                                "Disponibilidad",
+                                style: TextStyle(
+                                  fontSize: 35.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 241, 239, 239),
+                                ),
+                              )
+                            ],
+                          ),
+                          actions: [
+                            IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Notificaciones'),
+                                      content: const Text(
+                                          'Pronto tendrás donde crear notificaciones personalizadas'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
                                           },
-                                        );
-                                      },
-                                      icon: const Icon(Iconsax.notification,
-                                          color: Color.fromARGB(
-                                              206, 255, 255, 255)))
-                                ]),
+                                          child: const Text('Cerrar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Iconsax.notification,
+                                  color: Color.fromARGB(206, 255, 255, 255)),
+                            )
                           ],
-                        )
+                        ),
                       ],
-                    ),
-                  ),
-                )),
-            const ParkingAvailabilityWidget(),
-          ],
-        )));
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Parte dinámica con scroll
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const ParkingAvailabilityWidget(), 
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

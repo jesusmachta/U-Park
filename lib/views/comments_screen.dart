@@ -32,7 +32,7 @@ class CommentsScreen extends StatelessWidget {
                           children: [
                             CustomAppbar(
                                 title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       "Feedback",
