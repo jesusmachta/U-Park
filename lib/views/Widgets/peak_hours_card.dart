@@ -1,63 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:primera_app/controllers/peak_controller.dart';
 
-class PeakHoursCard extends StatelessWidget {
-  final String parkingName;
-  final Map<String, int> peakData;
+class PeakHoursCard extends StatefulWidget {
+  final PeakController peakController;
 
-  const PeakHoursCard({
-    Key? key,
-    required this.parkingName,
-    required this.peakData,
-  }) : super(key: key);
+  PeakHoursCard({required this.peakController});
+
+  @override
+  _PeakHoursCardState createState() => _PeakHoursCardState();
+}
+
+class _PeakHoursCardState extends State<PeakHoursCard> {
+  Map<int, Map<int, int>> peakHours = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPeakHours();
+  }
+
+  Future<void> fetchPeakHours() async {
+    try {
+      final hours = await widget.peakController.fetchPeakHours();
+      setState(() {
+        peakHours = hours;
+      });
+    } catch (e) {
+      print('Error fetching peak hours: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              parkingName,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            SizedBox(
-              height: 200,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  barGroups: peakData.entries.map((entry) {
-                    return BarChartGroupData(
-                      x: int.parse(entry.key),
-                      barRods: [
-                        BarChartRodData(
-                          y: entry.value.toDouble(),
-                          colors: [Colors.blue],
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                  titlesData: FlTitlesData(
-                    leftTitles: SideTitles(showTitles: true),
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      getTitles: (double value) {
-                        return value.toInt().toString();
-                      },
-                    ),
-                  ),
+    return peakHours.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        : BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.spaceAround,
+              barGroups: peakHours.entries.map((entry) {
+                return BarChartGroupData(
+                  x: entry.key,
+                  barRods: [
+                    BarChartRodData(
+                        y: entry.value.values
+                            .reduce((a, b) => a + b)
+                            .toDouble(),
+                        colors: [Colors.blue])
+                  ],
+                );
+              }).toList(),
+              titlesData: FlTitlesData(
+                leftTitles: SideTitles(showTitles: true),
+                bottomTitles: SideTitles(
+                  showTitles: true,
+                  getTitles: (double value) {
+                    return value.toInt().toString();
+                  },
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

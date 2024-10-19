@@ -34,55 +34,39 @@ class StatsScreen extends StatelessWidget {
                       Column(
                         children: [
                           CustomAppbar(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Estacionamientos",
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      color: Color.fromARGB(255, 231, 229, 229),
-                                    ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Estadísticas',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
                                   ),
-                                  Text(
-                                    "Estadísticas",
-                                    style: TextStyle(
-                                      fontSize: 35.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 241, 239, 239),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              actions: []),
+                                ),
+                              ],
+                            ),
+                            actions: [], // Add an empty list or your desired actions here
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            // Tab bar
-            const TabBar(
+            // Tabs
+            TabBar(
               tabs: [
-                Tab(text: "Porcentajes"),
-                Tab(text: "Horas Picos"),
+                Tab(text: 'Porcentaje de Parqueo'),
+                Tab(text: 'Horas Pico'),
               ],
-              labelColor: Colors.black,
-              indicatorColor: Colors.orange,
             ),
-            // Tab bar view
             Expanded(
               child: TabBarView(
                 children: [
-                  // First tab content
-                  SingleChildScrollView(
-                    child: ParkingPercentageWidget(), // Widget de porcentajes
-                  ),
-                  // Second tab content
-                  SingleChildScrollView(
-                    child: PeakHoursWidget(), // Llamada al widget de horas pico
-                  ),
+                  ParkingPercentageWidget(),
+                  PeakHoursWidget(), // Usar el widget de horas pico
                 ],
               ),
             ),

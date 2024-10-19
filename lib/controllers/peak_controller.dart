@@ -1,56 +1,53 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase/supabase.dart';
 
 class PeakController {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseClient supabaseClient;
 
-  Future<Map<String, int>> getPeakHoursData() async {
-    try {
-      final response =
-          await _supabase.from('peak').select('dayOfWeek').execute();
+  PeakController(this.supabaseClient);
 
-      if (response.status != 200 || response.data == null) {
-        throw Exception('Error fetching peak hours: ${response.status}');
+  Future<Map<int, Map<int, int>>> fetchPeakHours() async {
+    final response = await supabaseClient.from('entries').select().execute();
+
+    // Imprimimos la respuesta cruda para ver qué estamos recibiendo
+    print("Response from Supabase: ${response.data}");
+
+    // Verificamos el estado de la respuesta
+    if (response.status == 200) {
+      if (response.data is List) {
+        return processEntries(response.data);
+      } else {
+        print("No data returned from Supabase.");
+        return {}; // Retornamos un mapa vacío si no hay datos
       }
-
-      final data = response.data as List<dynamic>;
-
-      Map<String, int> peakData = {};
-      for (var item in data) {
-        String day = item['dayOfWeek'];
-        if (peakData.containsKey(day)) {
-          peakData[day] = peakData[day]! + 1;
-        } else {
-          peakData[day] = 1;
-        }
-      }
-
-      return peakData;
-    } catch (e) {
-      throw Exception('Error fetching peak hours: $e');
+    } else {
+      // Imprimir el mensaje de error si la consulta no se ejecuta correctamente
+      print("Error fetching entries: ${response.status}");
+      throw Exception('Error fetching entries');
     }
   }
 
-  Future<List<Map<String, dynamic>>> getEntries() async {
-    try {
-      final response = await _supabase.functions.invoke('get-entries');
-      if (response.status != 200 || response.data == null) {
-        throw Exception('Error fetching entries: ${response.status}');
-      }
-      return List<Map<String, dynamic>>.from(response.data);
-    } catch (e) {
-      throw Exception('Error fetching entries: $e');
-    }
-  }
+  Map<int, Map<int, int>> processEntries(List<dynamic> entries) {
+    Map<int, Map<int, int>> hoursCount = {};
 
-  Future<List<Map<String, dynamic>>> getCars() async {
-    try {
-      final response = await _supabase.functions.invoke('get-cars');
-      if (response.status != 200 || response.data == null) {
-        throw Exception('Error fetching cars: ${response.status}');
+    for (var entry in entries) {
+      DateTime timeOfEntry = DateTime.parse(entry['timeOfEntry']);
+      int hour = timeOfEntry.hour;
+      int parkingLotId = entry['parkingLotId'];
+
+      // Asegúrate de que parkingLotId esté entre 1 y 4
+      if (parkingLotId < 1 || parkingLotId > 4) continue;
+
+      if (!hoursCount.containsKey(parkingLotId)) {
+        hoursCount[parkingLotId] = {};
       }
-      return List<Map<String, dynamic>>.from(response.data);
-    } catch (e) {
-      throw Exception('Error fetching cars: $e');
+
+      if (hoursCount[parkingLotId]!.containsKey(hour)) {
+        hoursCount[parkingLotId]![hour] = hoursCount[parkingLotId]![hour]! + 1;
+      } else {
+        hoursCount[parkingLotId]![hour] = 1;
+      }
     }
+
+    return hoursCount;
   }
 }

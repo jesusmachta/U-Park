@@ -1,70 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:primera_app/controllers/peak_controller.dart';
-import 'peak_hours_card.dart';
+import 'package:supabase/supabase.dart';
 
 class PeakHoursWidget extends StatefulWidget {
-  const PeakHoursWidget({Key? key}) : super(key: key);
-
   @override
   _PeakHoursWidgetState createState() => _PeakHoursWidgetState();
 }
 
 class _PeakHoursWidgetState extends State<PeakHoursWidget> {
-  final PeakController _controller = PeakController();
-  late Future<List<Map<String, dynamic>>> _entriesFuture;
-  late Future<List<Map<String, dynamic>>> _carsFuture;
+  final SupabaseClient supabaseClient = SupabaseClient(
+      'https://yblzauqjxgmejjukplix.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlibHphdXFqeGdtZWpqdWtwbGl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg0MTY5MjUsImV4cCI6MjA0Mzk5MjkyNX0.09RA0WlPdtmVm7f7O-so8omxQx4ppOLtZgtxCiAoLDw'); // Cambia esto por tu clave
+
+  Map<int, Map<int, int>> peakHours = {};
+  bool isLoading = true; // Estado de carga
+  String errorMessage = '';
 
   @override
   void initState() {
     super.initState();
-    _entriesFuture = _controller.getEntries();
-    _carsFuture = _controller.getCars();
+    fetchEntries();
+  }
+
+  Future<void> fetchEntries() async {
+    setState(() {
+      isLoading = true; // Activar estado de carga
+      errorMessage = ''; // Reiniciar mensaje de error
+    });
+
+    try {
+      PeakController peakController = PeakController(supabaseClient);
+      peakHours = await peakController.fetchPeakHours();
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString(); // Guardar el mensaje de error
+      });
+    } finally {
+      setState(() {
+        isLoading = false; // Desactivar estado de carga
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: Future.wait<dynamic>([_entriesFuture, _carsFuture]),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No data available'));
-        }
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator()); // Cargando
+    }
 
-        final entries = snapshot.data![0];
-        final cars = snapshot.data![1];
+    if (errorMessage.isNotEmpty) {
+      return Center(child: Text('Error: $errorMessage')); // Mostrar error
+    }
 
-        // Verifica que entries tenga datos
-        if (entries.isEmpty) {
-          return const Center(child: Text('No entries available'));
-        }
-
-        Map<String, Map<String, int>> peakDataByParking = {};
-
-        for (var entry in entries) {
-          final parkingName = entry['parkingName'];
-          final hour = entry['hour'];
-
-          // Asegúrate de que parkingName y hour sean válidos
-          if (parkingName != null && hour != null) {
-            peakDataByParking.putIfAbsent(parkingName, () => {});
-            peakDataByParking[parkingName]![hour] =
-                (peakDataByParking[parkingName]![hour] ?? 0) + 1;
-          }
-        }
-
-        return ListView(
-          children: peakDataByParking.entries.map((entry) {
-            return PeakHoursCard(
-              parkingName: entry.key,
-              peakData: entry.value,
+    // Aquí puedes construir tu gráfico
+    return BarChart(
+      BarChartData(
+        alignment: BarChartAlignment.spaceAround,
+        barGroups: peakHours.entries.expand((entry) {
+          return entry.value.entries.map((hourEntry) {
+            return BarChartGroupData(
+              x: entry.key, // Estacionamiento
+              barRods: [
+                BarChartRodData(
+                    y: hourEntry.value.toDouble(), colors: [Colors.blue]),
+              ],
             );
-          }).toList(),
-        );
-      },
+          });
+        }).toList(),
+        titlesData: FlTitlesData(
+          leftTitles: SideTitles(showTitles: true),
+          bottomTitles: SideTitles(
+            showTitles: true,
+            getTitles: (double value) {
+              return 'Estacionamiento ${value.toInt()}'; // Mostrar estacionamientos
+            },
+          ),
+        ),
+      ),
     );
   }
 }
