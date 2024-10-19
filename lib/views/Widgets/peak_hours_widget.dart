@@ -25,8 +25,8 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
 
   Future<void> fetchEntries() async {
     setState(() {
-      isLoading = true; // Activar estado de carga
-      errorMessage = ''; // Reiniciar mensaje de error
+      isLoading = true;
+      errorMessage = '';
     });
 
     try {
@@ -53,7 +53,6 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
       return Center(child: Text('Error: $errorMessage')); // Mostrar error
     }
 
-    // Aquí puedes construir tu gráfico
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,

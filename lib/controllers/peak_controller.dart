@@ -8,19 +8,16 @@ class PeakController {
   Future<Map<int, Map<int, int>>> fetchPeakHours() async {
     final response = await supabaseClient.from('entries').select().execute();
 
-    // Imprimimos la respuesta cruda para ver qué estamos recibiendo
     print("Response from Supabase: ${response.data}");
 
-    // Verificamos el estado de la respuesta
     if (response.status == 200) {
       if (response.data is List) {
         return processEntries(response.data);
       } else {
         print("No data returned from Supabase.");
-        return {}; // Retornamos un mapa vacío si no hay datos
+        return {};
       }
     } else {
-      // Imprimir el mensaje de error si la consulta no se ejecuta correctamente
       print("Error fetching entries: ${response.status}");
       throw Exception('Error fetching entries');
     }
@@ -34,8 +31,7 @@ class PeakController {
       int hour = timeOfEntry.hour;
       int parkingLotId = entry['parkingLotId'];
 
-      // Asegúrate de que parkingLotId esté entre 1 y 4
-      if (parkingLotId < 1 || parkingLotId > 4) continue;
+      if (parkingLotId < 1 || parkingLotId > 5) continue;
 
       if (!hoursCount.containsKey(parkingLotId)) {
         hoursCount[parkingLotId] = {};
