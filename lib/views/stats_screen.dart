@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
-// ignore: unused_import
-import 'package:primera_app/views/Widgets/parking_percentage_card.dart';
 import 'package:primera_app/views/Widgets/parking_percentage_widget.dart';
+import 'package:primera_app/views/Widgets/peak_hours_widget.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -12,12 +11,12 @@ class StatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // Number of tabs
+      length: 2, // Número de pestañas
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            // Header
+            // Encabezado
             ClipPath(
               clipper: CustomCurvedEdges(),
               child: Container(
@@ -36,7 +35,7 @@ class StatsScreen extends StatelessWidget {
                         children: [
                           CustomAppbar(
                               title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     "Estacionamientos",
@@ -72,17 +71,17 @@ class StatsScreen extends StatelessWidget {
               labelColor: Colors.black,
               indicatorColor: Colors.orange,
             ),
-            // Tab bar view
-            const Expanded(
+            // Contenido de cada pestaña
+            Expanded(
               child: TabBarView(
                 children: [
-                  // First tab content
+                  // Primera pestaña (Porcentajes)
                   SingleChildScrollView(
                     child: ParkingPercentageWidget(),
                   ),
-                  // Second tab content
+                  // Segunda pestaña (Horas Pico)
                   SingleChildScrollView(
-                    child: PeakHoursWidget(),
+                    child: PeakHoursWidget(), // Widget de horas pico
                   )
                 ],
               ),
@@ -90,18 +89,6 @@ class StatsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Dummy widget for PeakHoursWidget
-class PeakHoursWidget extends StatelessWidget {
-  const PeakHoursWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Contenido de Horas Picos"),
     );
   }
 }
