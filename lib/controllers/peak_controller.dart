@@ -27,23 +27,27 @@ class PeakController {
     Map<int, Map<int, int>> hoursCount = {};
 
     for (var entry in entries) {
-      DateTime timeOfEntry = DateTime.parse(entry['timeOfEntry']);
-      int hour = timeOfEntry.hour;
-      int parkingLotId = entry['parkingLotId'];
+      // Filtrar solo entradas donde el carro está dentro (entryType es true)
+      if (entry['entryType'] == true) {
+        int hour = entry['hour'];
+        int parkingLotId = entry['parkingLotId'];
 
-      if (parkingLotId < 1 || parkingLotId > 5) continue;
+        if (parkingLotId < 1 || parkingLotId > 5) continue;
 
-      if (!hoursCount.containsKey(parkingLotId)) {
-        hoursCount[parkingLotId] = {};
-      }
+        if (!hoursCount.containsKey(parkingLotId)) {
+          hoursCount[parkingLotId] = {};
+        }
 
-      if (hoursCount[parkingLotId]!.containsKey(hour)) {
-        hoursCount[parkingLotId]![hour] = hoursCount[parkingLotId]![hour]! + 1;
-      } else {
-        hoursCount[parkingLotId]![hour] = 1;
+        if (hoursCount[parkingLotId]!.containsKey(hour)) {
+          hoursCount[parkingLotId]![hour] =
+              hoursCount[parkingLotId]![hour]! + 1;
+        } else {
+          hoursCount[parkingLotId]![hour] = 1;
+        }
       }
     }
 
+    print("Processed peak hours: $hoursCount"); // Imprimir conteos procesados
     return hoursCount;
   }
 }

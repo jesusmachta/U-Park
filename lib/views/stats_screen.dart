@@ -3,7 +3,7 @@ import 'package:primera_app/views/Widgets/circular_container.dart';
 import 'package:primera_app/views/Widgets/curved_edges.dart';
 import 'package:primera_app/views/Widgets/custom_appbar.dart';
 import 'package:primera_app/views/Widgets/parking_percentage_widget.dart';
-import 'package:primera_app/views/Widgets/peak_hours_widget.dart'; // Importar el widget de horas pico
+import 'package:primera_app/views/Widgets/peak_hours_widget.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -16,7 +16,7 @@ class StatsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            // Header
+            // Encabezado
             ClipPath(
               clipper: CustomCurvedEdges(),
               child: Container(
@@ -34,39 +34,55 @@ class StatsScreen extends StatelessWidget {
                       Column(
                         children: [
                           CustomAppbar(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Estadísticas',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Estacionamientos",
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color.fromARGB(255, 231, 229, 229),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            actions: [], // Add an empty list or your desired actions here
-                          ),
+                                  Text(
+                                    "Estadísticas",
+                                    style: TextStyle(
+                                      fontSize: 35.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 241, 239, 239),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              actions: []),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),
               ),
             ),
-            // Tabs
-            TabBar(
+            // Tab bar
+            const TabBar(
               tabs: [
-                Tab(text: 'Porcentaje de Parqueo'),
-                Tab(text: 'Horas Pico'),
+                Tab(text: "Porcentajes"),
+                Tab(text: "Horas Picos"),
               ],
+              labelColor: Colors.black,
+              indicatorColor: Colors.orange,
             ),
+            // Contenido de cada pestaña
             Expanded(
               child: TabBarView(
                 children: [
-                  ParkingPercentageWidget(),
-                  PeakHoursWidget(), // Usar el widget de horas pico
+                  // Primera pestaña (Porcentajes)
+                  SingleChildScrollView(
+                    child: ParkingPercentageWidget(),
+                  ),
+                  // Segunda pestaña (Horas Pico)
+                  SingleChildScrollView(
+                    child: PeakHoursWidget(), // Widget de horas pico
+                  )
                 ],
               ),
             ),

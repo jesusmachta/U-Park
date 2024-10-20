@@ -1,65 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:primera_app/controllers/peak_controller.dart';
+import 'package:primera_app/models/peak.dart';
 
-class PeakHoursCard extends StatefulWidget {
-  final PeakController peakController;
+class PeakHoursCard extends StatelessWidget {
+  final List<Peak> peaks;
+  final int parkingLotId;
 
-  PeakHoursCard({required this.peakController});
-
-  @override
-  _PeakHoursCardState createState() => _PeakHoursCardState();
-}
-
-class _PeakHoursCardState extends State<PeakHoursCard> {
-  Map<int, Map<int, int>> peakHours = {};
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPeakHours();
-  }
-
-  Future<void> fetchPeakHours() async {
-    try {
-      final hours = await widget.peakController.fetchPeakHours();
-      setState(() {
-        peakHours = hours;
-      });
-    } catch (e) {
-      print('Error fetching peak hours: $e');
-    }
-  }
+  PeakHoursCard({required this.peaks, required this.parkingLotId});
 
   @override
   Widget build(BuildContext context) {
-    return peakHours.isEmpty
-        ? Center(child: CircularProgressIndicator())
-        : BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              barGroups: peakHours.entries.map((entry) {
-                return BarChartGroupData(
-                  x: entry.key,
-                  barRods: [
-                    BarChartRodData(
-                        y: entry.value.values
-                            .reduce((a, b) => a + b)
-                            .toDouble(),
-                        colors: [Colors.blue])
-                  ],
-                );
-              }).toList(),
-              titlesData: FlTitlesData(
-                leftTitles: SideTitles(showTitles: true),
-                bottomTitles: SideTitles(
-                  showTitles: true,
-                  getTitles: (double value) {
-                    return value.toInt().toString();
-                  },
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              'Estacionamiento $parkingLotId - Horas Pico',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: 24, // Horas del día (0-23)
+                  barGroups: _createBarGroups(),
+                  titlesData: FlTitlesData(
+                    leftTitles: SideTitles(showTitles: true),
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      getTitles: (double value) {
+                        return value.toInt().toString();
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<BarChartGroupData> _createBarGroups() {
+    Map<int, int> data = _aggregateData();
+    List<BarChartGroupData> barGroups = [];
+
+    data.forEach((hour, count) {
+      barGroups.add(
+        BarChartGroupData(
+          x: hour,
+          barRods: [
+            BarChartRodData(y: count.toDouble(), colors: [Colors.blue])
+          ],
+        ),
+      );
+    });
+
+    return barGroups;
+  }
+
+  Map<int, int> _aggregateData() {
+    Map<int, int> data = {};
+
+    for (var peak in peaks) {
+      int hour = peak.timestamp.hour;
+      if (peak.type == 'in') {
+        data[hour] = (data[hour] ?? 0) + 1;
+      }
+    }
+
+    return data;
   }
 }
