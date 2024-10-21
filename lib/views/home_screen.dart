@@ -21,9 +21,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
-        // Se cambia a `Column` para manejar la estructura principal
         children: [
-          // Header (Encabezado fijo, no hace scroll)
           ClipPath(
             clipper: CustomCurvedEdges(),
             child: Container(
@@ -95,8 +93,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // Parte dinámica con scroll
           Expanded(
             child: SingleChildScrollView(
               child: Column(

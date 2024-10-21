@@ -17,6 +17,14 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
   bool isLoading = true;
   String errorMessage = '';
 
+  final List<String> parkingLotNames = [
+    "Plano",
+    "Inclinado",
+    "VIP",
+    "Profesores",
+    "Terreno"
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +60,13 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
       barGroups.add(BarChartGroupData(
         x: hour,
         barRods: [
-          BarChartRodData(y: yValue, width: 15, colors: [Colors.blue])
+          BarChartRodData(
+            y: yValue,
+            width: 15,
+            colors: [
+              const Color.fromARGB(255, 255, 164, 27)
+            ], 
+          ),
         ],
       ));
     }
@@ -62,8 +76,43 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      final size = MediaQuery.of(context).size;
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                0,
+                screenHeight * 0.3,
+                0,
+                0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    strokeWidth: size.width * 0.02,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        Colors.orangeAccent),
+                  ),
+                  SizedBox(height: size.height * 0.02),
+                  Text(
+                    'Cargando estadísticas...',
+                    style: TextStyle(
+                      fontSize: size.width * 0.04,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     if (errorMessage.isNotEmpty) {
@@ -74,28 +123,69 @@ class _PeakHoursWidgetState extends State<PeakHoursWidget> {
       child: Column(
         children: List.generate(5, (index) {
           int parkingLotId = index + 1;
+          String parkingLotName = parkingLotNames[index];
           return Column(
             children: [
               Text(
-                'Estacionamiento $parkingLotId',
+                parkingLotName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Container(
                 padding: const EdgeInsets.all(8.0),
-                height: 300, // Aumentar la altura para acomodar las etiquetas
-                child: BarChart(
-                  BarChartData(
-                    barGroups: getBarChartData(parkingLotId),
-                    titlesData: FlTitlesData(
-                      leftTitles: SideTitles(showTitles: true),
-                      bottomTitles: SideTitles(
-                        showTitles: true,
-                        getTitles: (value) {
-                          return value.toInt().toString(); // Mostrar horas
-                        },
+                height: 300,
+                child: Stack(
+                  children: [
+                    BarChart(
+                      BarChartData(
+                        barGroups: getBarChartData(parkingLotId),
+                        titlesData: FlTitlesData(
+                          leftTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            getTitles: (value) {
+                              return value.toInt().toString(); 
+                            },
+                          ),
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 30,
+                            getTitles: (value) {
+                              return value.toInt().toString(); 
+                            },
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            bottom: BorderSide(color: Colors.black, width: 1),
+                            left: BorderSide(color: Colors.black, width: 1),
+                          ),
+                        ),
+                        gridData: FlGridData(show: true),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      left: 30,
+                      bottom: 0,
+                      child: Text(
+                        'Horas',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Positioned(
+                      top: 20,
+                      left: 5,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(
+                          'Carros',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
